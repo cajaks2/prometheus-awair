@@ -7,12 +7,15 @@ from pyawair.data import *
 
 
 REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
+RESPONSE_CODE = Counter('awair_reponse_code', 'HTTP Response Codes', ['http_code'])
 AWAIR_SCORE = Gauge("prom_awair_score", "Awair score of device")
 AWAIR_TEMP = Gauge("prom_awair_temp", "Awair temp of device")
 AWAIR_HUMID = Gauge("prom_awair_humid", "Awair humidity of device")
 AWAIR_CO2 = Gauge("prom_awair_co2", "Awair co2 level of device")
 AWAIR_VOC = Gauge("prom_awair_voc", "Awair voc of device")
 AWAIR_PM25 = Gauge("prom_awair_pm25", "Awair pm25 of device")
+FAILURE_COUNT = Counter('awair_failure_count', 'AWAIR API FAILURES', ['method'])
+
 
 @REQUEST_TIME.time()
 def retrieve_data(auth="",device_name="Bedroom"):
@@ -37,6 +40,8 @@ def retrieve_data(auth="",device_name="Bedroom"):
         print("Failed to retrieve data.")
         print(str(e))
         print(data)
+        FAILURE_COUNT.labels('awair_current_data').inc()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
