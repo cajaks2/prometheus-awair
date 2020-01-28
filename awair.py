@@ -42,7 +42,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--token', help='auth-token from Awair',required=True)
     parser.add_argument('--interval',type=int,default=300, help='interval time watch for quota limits, 300s for hobby level')
-    parser.add_argument('--device',int,default="Bedroom", help='Device to recent metrics from')
+    parser.add_argument('--device',int,default="Bedroom", help='Device to pull recent metrics for')
     args = parser.parse_args()
     print("Starting Server")
     auth = AwairAuth(args.token)
