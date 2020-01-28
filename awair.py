@@ -1,4 +1,4 @@
-from prometheus_client import start_http_server, Gauge, Summary
+from prometheus_client import start_http_server, Gauge, Summary, Counter
 import time
 import argparse
 from pyawair.auth import *
