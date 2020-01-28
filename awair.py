@@ -5,7 +5,6 @@ import argparse
 from pyawair.auth import *
 from pyawair.data import *
 
-auth = AwairAuth("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjczOTgifQ.hY3cNLWOxeansfz8Hh-wyXs3rvnddzyjHNk-xgsL0YU")
 
 
 # Create a metric to track time spent and requests made.
@@ -20,6 +19,7 @@ AWAIR_PM25 = Gauge("prom_awair_pm25", "Awair pm25 of device")
 # Decorate function with metric.
 @REQUEST_TIME.time()
 def retrieve_data(auth=""):
+    data = ""
     try:
         data = (get_current_air_data(auth, device_name='Bedroom'))
         #prom_output  = []
@@ -39,7 +39,9 @@ def retrieve_data(auth=""):
                     AWAIR_PM25.set(sensor['value'])     
     
     except Exception as e:
+        print("Failed to retrieve data.")
         print(str(e))
+        print(data)
 
 if __name__ == '__main__':
     # Start up the server to expose the metrics.
@@ -48,7 +50,8 @@ if __name__ == '__main__':
     parser.add_argument('--interval',type=int,default=300, help='interval time watch for quota limits, 300s for hobby level')
     args = parser.parse_args()
     print("Starting Server")
+    auth = AwairAuth(args.token)
     start_http_server(8000)
     while True:
-        retrieve_data(args.token)
+        retrieve_data(auth)
         time.sleep(args.interval)
