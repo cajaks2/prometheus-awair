@@ -53,5 +53,5 @@ if __name__ == '__main__':
     auth = AwairAuth(args.token)
     start_http_server(8000)
     while True:
-        retrieve_data(auth,device)
+        retrieve_data(auth,args.device)
         time.sleep(args.interval)
