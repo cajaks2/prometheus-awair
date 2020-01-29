@@ -3,6 +3,7 @@ import time
 import argparse
 from pyawair.auth import *
 from pyawair.data import *
+import traceback
 
 
 
@@ -38,7 +39,7 @@ def retrieve_data(auth="",device_name="Bedroom"):
     
     except Exception as e:
         print("Failed to retrieve data.")
-        print(str(e))
+        traceback.print_exc()
         print(data)
         FAILURE_COUNT.labels('awair_current_data').inc()
 
