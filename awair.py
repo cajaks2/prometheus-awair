@@ -23,8 +23,14 @@ AWAIR_PM25 = None
 def retrieve_data(auth="",device_name="Bedroom"):
     data = ""
     try:
+        global AWAIR_SCORE
+        global AWAIR_TEMP
+        global AWAIR_HUMID
+        global AWAIR_CO2
+        global AWAIR_PM25
+        global AWAIR_VOC
         data = (get_current_air_data(auth, device_name=device_name))
-        if AWAIR_SCORE is None:
+        if AWAIR_SCORE is not None:
             AWAIR_SCORE = Gauge("awair_device_score", "Awair score of device",['device'])
             AWAIR_TEMP = Gauge("awair_device_temp", "Awair temp of device",['device'])
             AWAIR_HUMID = Gauge("awair_device_humid", "Awair humidity of device",['device'])
