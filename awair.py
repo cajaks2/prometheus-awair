@@ -39,7 +39,7 @@ def retrieve_data(auth="",device_name="Bedroom"):
             AWAIR_PM25 = Gauge("awair_device_pm25", "Awair pm25 of device",['device'])
         string_device = str(device_name)
         for device in data:
-            AWAIR_SCORE.set(device['score'])
+            AWAIR_SCORE.labels(string_device).set(device['score'])
             for sensor in device['sensors']:
                 if sensor['comp'] == 'temp':
                     AWAIR_TEMP.labels(string_device).set(sensor['value'])
