@@ -37,19 +37,20 @@ def retrieve_data(auth="",device_name="Bedroom"):
             AWAIR_CO2 = Gauge("awair_device_co2", "Awair co2 level of device",['device'])
             AWAIR_VOC = Gauge("awair_device_voc", "Awair voc of device",['device'])
             AWAIR_PM25 = Gauge("awair_device_pm25", "Awair pm25 of device",['device'])
+        string_device = str(device_name)
         for device in data:
             AWAIR_SCORE.set(device['score'])
             for sensor in device['sensors']:
                 if sensor['comp'] == 'temp':
-                    AWAIR_TEMP.labels(device_name).set(sensor['value'])
+                    AWAIR_TEMP.labels(string_device).set(sensor['value'])
                 if sensor['comp'] == 'humid':
-                    AWAIR_HUMID.labels(device_name).set(sensor['value'])
+                    AWAIR_HUMID.labels(string_device).set(sensor['value'])
                 if sensor['comp'] == 'co2':
-                    AWAIR_CO2.labels(device_name).set(sensor['value'])
+                    AWAIR_CO2.labels(string_device).set(sensor['value'])
                 if sensor['comp'] == 'voc':
-                    AWAIR_VOC.labels(device_name).set(sensor['value'])
+                    AWAIR_VOC.labels(string_device).set(sensor['value'])
                 if sensor['comp'] == 'pm25':
-                    AWAIR_PM25.labels(device_name).set(sensor['value'])     
+                    AWAIR_PM25.labels(string_device).set(sensor['value'])     
     
     except Exception as e:
         print("Failed to retrieve data.")
