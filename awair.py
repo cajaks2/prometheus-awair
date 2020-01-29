@@ -7,7 +7,7 @@ import traceback
 
 
 
-REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
+REQUEST_TIME = Summary('awair_equest_processing_seconds', 'Time spent processing request')
 RESPONSE_CODE = Counter('awair_reponse_code', 'HTTP Response Codes', ['http_code'])
 FAILURE_COUNT = Counter('awair_failure_count', 'AWAIR API FAILURES', ['method'])
 AWAIR_SCORE = Gauge("awair_device_score", "Awair score of device",['device'])
