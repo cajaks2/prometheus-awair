@@ -10,6 +10,5 @@ RUN git clone https://github.com/netmanchris/pyawair.git
 WORKDIR pyawair
 RUN python setup.py install
 ADD awair.py .
-ENTRYPOINT [ "python" ]
-CMD [ "awair.py" ]
+ENTRYPOINT [ "python", "-u", "awair.py" ]
 
