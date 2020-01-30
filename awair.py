@@ -22,10 +22,10 @@ AWAIR_PM25 = Gauge("awair_device_pm25", "Awair pm25 of device", ['device'])
 
 
 @REQUEST_TIME.time()
-def retrieve_data(auth="", device_name="Bedroom"):
+def retrieve_data(auth="", device_name="Bedroom",device_id=None):
     data = ""
     try:
-        data = (get_current_air_data(auth, device_name=device_name))
+        data = (get_current_air_data(auth, device_name=device_name,device_id=device_id))
         for device in data:
             AWAIR_SCORE.labels(device_name).set(device['score'])
             for sensor in device['sensors']:
