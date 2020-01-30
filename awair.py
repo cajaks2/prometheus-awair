@@ -69,7 +69,7 @@ if __name__ == '__main__':
     auth = AwairAuth(args.token)
     device_id = get_device_id(auth, args.device)
     print("Starting Server for {} with device id of {}".format(
-        args.device), device_id)
+        args.device, device_id))
     start_http_server(8000)
     while True:
         retrieve_data(auth, args.device, device_id=device_id)
