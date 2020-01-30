@@ -22,10 +22,10 @@ AWAIR_PM25 = Gauge("awair_device_pm25", "Awair pm25 of device", ['device'])
 
 
 @REQUEST_TIME.time()
-def retrieve_data(auth="", device_name="Bedroom",device_id=None):
+def retrieve_data(auth="", device_name="Bedroom",device_id=None,device_type=None):
     data = ""
     try:
-        data = (get_current_air_data(auth, device_name=device_name,device_id=device_id))
+        data = (get_current_air_data(auth, device_name=device_name,device_id=device_id,device_type=device_type))
         for device in data:
             AWAIR_SCORE.labels(device_name).set(device['score'])
             for sensor in device['sensors']:
@@ -47,15 +47,20 @@ def retrieve_data(auth="", device_name="Bedroom",device_id=None):
         FAILURE_COUNT.labels('awair_current_data').inc()
 
 
-def get_device_id(auth="", device_name="Bedroom"):
+def get_device_info(auth="", device_name="Bedroom"):
     devices = get_all_devices(auth)
     device_names = [d['name'] for d in devices]
+    device_id = None
+    device_type = None
     if device_name not in device_names:
         raise ValueError(
             "This device name ({}) does not exist in your Awair account. Be aware that the device name is capital sensitive.".format(
                 device_name))
-    return next((item for item in devices if item["name"] == device_name),
+    device_id = next((item for item in devices if item["name"] == device_name),
                 False)['deviceId']  # get the device ID
+    device_type = next((item for item in devices if item["name"] == device_name),
+                False)['deviceType']  # get the device ID
+    return device_id,device_type
 
 
 if __name__ == '__main__':
@@ -67,10 +72,10 @@ if __name__ == '__main__':
                         help='Device to pull recent metrics for')
     args = parser.parse_args()
     auth = AwairAuth(args.token)
-    device_id = get_device_id(auth, args.device)
-    print("Starting Server for {} with device id of {}".format(
-        args.device, device_id))
+    device_id,device_type = get_device_info(auth, args.device)
+    print("Starting Server for {} with device id of {} and device type of {}.".format(
+        args.device, device_id,device_type))
     start_http_server(8000)
     while True:
-        retrieve_data(auth, args.device, device_id=device_id)
+        retrieve_data(auth, args.device, device_id=device_id,device_type=device_type)
         time.sleep(args.interval)
